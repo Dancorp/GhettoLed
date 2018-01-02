@@ -9,8 +9,9 @@
 - A switch allow to turn lights on/off and change pattern.
 - Manual or Autochange patterns
 
-**Vidéo : https://www.youtube.com/watch?v=5PWkd7Fl-ms**
-**All Patterns: https://www.youtube.com/watch?v=2_dK7ZXJKgY**
+## What's it look like?
+- Video : https://www.youtube.com/watch?v=5PWkd7Fl-ms**
+- All Patterns: https://www.youtube.com/watch?v=2_dK7ZXJKgY**
  
 ## Compatible devices
 Every boombox equiped with a lineout can be upgraded.
@@ -51,8 +52,8 @@ https://www.ebay.com/itm/263092669047
 - Some components (see Schematics folder)
 
 ## Resources
-Some pics for the JVC M70 integration : https://photos.app.goo.gl/I8EfIdO2DLxacI033
-Some pics of my prototyping board for the JVC M70 : https://photos.app.goo.gl/AQ6XMqi3j0m6LJvz1
+- Some pics for the JVC M70 integration : https://photos.app.goo.gl/I8EfIdO2DLxacI033
+- Some pics of my prototyping board for the JVC M70 : https://photos.app.goo.gl/AQ6XMqi3j0m6LJvz1
 
 
 
@@ -61,7 +62,7 @@ http://boomboxery.com/forum/index.php/topic/26495-evolved-led-mod-for-jvc-m70/
 
 
 **This source code is based on Scott Marley and Cine-Lights works.**
-Cine-Lights : https://www.youtube.com/channel/UCOG6Bi2kvpDa1c8gHWZI5CQ
-Scott Marley : https://www.youtube.com/user/scottmarley85
+- Cine-Lights : https://www.youtube.com/channel/UCOG6Bi2kvpDa1c8gHWZI5CQ
+- Scott Marley : https://www.youtube.com/user/scottmarley85
 
 
