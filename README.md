@@ -9,8 +9,15 @@
 - A switch allow to turn lights on/off and change pattern.
 - Manual or Autochange patterns
 
-**Vidéo : https://www.youtube.com/watch?v=5PWkd7Fl-ms **
+**Vidéo : https://www.youtube.com/watch?v=5PWkd7Fl-ms**
+**All Patterns: https://www.youtube.com/watch?v=2_dK7ZXJKgY**
+ 
+## Compatible devices
+Every boombox equiped with a lineout can be upgraded.
+The challenge is about led integration. (speakers/grid shape) but they can be placed everywhere (radio scale, tape...)
 
+## Known issues:
+- Some little ground noise.
 
 ## How to customize the code
 You need to set the number of LED on each LED strip.
@@ -32,7 +39,7 @@ A long press on button allows to:
 - An Arduino UNO
 https://fr.aliexpress.com/item/UNO-R3-CH340G-ATmega328P-compatible-for-Arduino-UNO-R3/32523366108.html
 
-- I recommand to use WS2812 strip led with 100 Leds / Meter because of the black PCB/Led (check pics) (1M 100 IP30)
+- I recommend to use WS2812 strip led with 100 Leds / Meter because of the black PCB/Led (check pics) (1M 100 IP30)
 https://fr.aliexpress.com/item/1m-4m-5m-WS2812B-Smart-led-pixel-strip-Black-White-PCB-30-60-144-leds-m/2036819167.html
 
 - Depending your setup, you may need a dedicated power supply (5V 6A)
