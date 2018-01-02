@@ -1,5 +1,5 @@
 // -----------------------------------------
-// -- GhettoLED  -- by Dancorp 
+// -- GhettoLED  -- by Dancorp (France)
 // http://boomboxery.com/forum/index.php/topic/26495-evolved-led-mod-for-jvc-m70/
 // -----------------------------------------
 
@@ -8,15 +8,15 @@
 
 # define LEFT_OUT_PIN 5         // Left channel data out pin to LEDs
 # define RIGHT_OUT_PIN 6        // Right channel data out pin to LEDs
-# define VU_OUT_PIN 2           // Vu meter channel data out pin to LEDs
+# define VU_OUT_PIN 2           // Vu meter channel data out pin to LEDs. This static LED strip can be used for anything else.
 # define LEFT_IN_PIN A4         // Left aux in signal
 # define RIGHT_IN_PIN A5        // Right aux in signal
-# define RD_LED 12              // Radio LED
+# define RD_LED 12              // Radio LED (the simple blue LED trigered by a NPN transistor)
 # define BTN_PIN   3            // Push button on this pin
 # define N_PIXELS 44            // Number of pixels in each string
 # define N_PIXELS_VU 10         // Number of pixels in VU Meter led string
 # define COLOR_ORDER GRB        // Try mixing up the letters (RGB, GBR, BRG, etc) for a whole new world of color combinations
-# define BRIGHTNESS 200          // 0-255, higher number is brighter.
+# define BRIGHTNESS 200         // 0-255, higher number is brighter.
 # define LED_TYPE WS2812B       // Probably WS2812B
 # define DC_OFFSET 0            // DC offset in aux signal - if unusure, leave 0
 # define NOISE 10               // Noise/hum/interference in aux signal
@@ -119,12 +119,12 @@ void loop() {
         if(autoChangeVisuals){
         EVERY_N_SECONDS(PATTERN_TIME) { buttonPushCounter = ++buttonPushCounter % 17; }
             for(int dot = 0; dot < N_PIXELS_VU; dot++) { 
-            ledsVu[dot] = CRGB::Yellow;
+            ledsVu[dot] = CRGB::Yellow; // VU Meter Color when Autochange
              }
             }
         else {
             for(int dot = 0; dot < N_PIXELS_VU; dot++) { 
-            ledsVu[dot] = CRGB::Orange;
+            ledsVu[dot] = CRGB::Orange; // VU Meter Color when Manual
               }
         }
 
@@ -208,13 +208,13 @@ void loop() {
   }
   else {
      clearleds();
-     digitalWrite(RD_LED, LOW); 
+     digitalWrite(RD_LED, LOW); // Turn off the Radio LED
 
   }
   }
 
 
-   void clearleds() {
+   void clearleds() { // Turn off all LEDs 
         for(int dot = 0; dot < N_PIXELS; dot++) { 
             ledsLeft[dot] = CRGB::Black;
             ledsRight[dot] = CRGB::Black;
