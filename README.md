@@ -10,8 +10,7 @@
 - Manual or Autochange patterns
 
 ## What's it look like?
-- Video : https://www.youtube.com/watch?v=5PWkd7Fl-ms**
-- All Patterns: https://www.youtube.com/watch?v=2_dK7ZXJKgY**
+GhettoLED Rev1.0 on a JVC M70 : https://youtu.be/DNqbE8rCtKw
  
 ## Compatible devices
 Every boombox equiped with a lineout can be upgraded.
