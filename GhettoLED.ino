@@ -8,7 +8,7 @@
 
 # define LEFT_OUT_PIN 5         // Left channel data out pin to LEDs
 # define RIGHT_OUT_PIN 6        // Right channel data out pin to LEDs
-# define VU_OUT_PIN 2           // Vu meter channel data out pin to LEDs. This static LED strip can be used for anything else.
+# define VU_OUT_PIN 7           // Vu meter channel data out pin to LEDs. This static LED strip can be used for anything else.
 # define LEFT_IN_PIN A4         // Left aux in signal
 # define RIGHT_IN_PIN A5        // Right aux in signal
 # define RD_LED 12              // Radio LED (the simple blue LED trigered by a NPN transistor)
