@@ -1,4 +1,4 @@
-![GhettoLed on a JVC M70](hhttps://hackadaycom.files.wordpress.com/2018/01/ghettoled_boombox_arduino_led_strips.jpg)
+![GhettoLed on a JVC M70](https://hackadaycom.files.wordpress.com/2018/01/ghettoled_boombox_arduino_led_strips.jpg)
 
 
 # GhettoLed
