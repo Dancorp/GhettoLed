@@ -20,13 +20,14 @@ Every boombox equiped with a lineout can be upgraded.
 The challenge is about led integration. (speakers/grid shape) but they can be placed everywhere (radio scale, tape...)
 
 ## Known issues:
-- Some little ground noise.
+- Some little ground noise due to the Switched-mode power supply (Filtering / Help needed)
+- Sometime, Button bounces depending the implementation. (Ground issue too i think)
 
 ## How to customize the code
-You need to set the number of LED on each LED strip.
-You need to install FastLed library and use Arduino 1.65 software to prevent crashs.
-(to be continued)
-
+- You need to set the number of LED on each LED strip.
+- Depending your coding skills, you can change colors on some templates. (firsts VU for exemple)
+- You need to install FastLed library and use Arduino 1.65 software to prevent crashs.
+- to be continued...
 
 ## How to use it
 By default, all lights are turned off.
@@ -52,6 +53,11 @@ https://fr.aliexpress.com/item/LED-AC110V-220V-TO-DC-12V-24V-5V-1A-2A-5A-8A-10A-
 https://www.ebay.com/itm/263092669047
 
 - Some components (see Schematics folder)
+
+## Help needed !
+- Most templates have been created for a linear system. If some have a correct visual rendering, others would need to be adapted to the round shape. (-fire- for exemple)
+Anyone can propose modified or original templates.
+- Regarding electronics, I need tips on filtering to remove power supply and LED noise.
 
 ## Resources
 - Some pics for the JVC M70 integration : https://photos.app.goo.gl/I8EfIdO2DLxacI033
