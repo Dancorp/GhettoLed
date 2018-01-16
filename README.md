@@ -20,8 +20,7 @@ Every boombox equiped with a lineout can be upgraded.
 The challenge is about led integration. (speakers/grid shape) but they can be placed everywhere (radio scale, tape...)
 
 ## Known issues:
-- Some little ground noise due to the Switched-mode power supply (Filtering / Help needed)
-- Sometime, Button bounces depending the implementation. (Ground issue too i think)
+- Some little ground noise due to the Switched-mode power supply (Filtering needed)
 
 ## How to customize the code
 - You need to set the number of LED on each LED strip.
