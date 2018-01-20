@@ -6,15 +6,15 @@
 #include <FastLED.h>
 #include <EEPROM.h>
 
-# define LEFT_OUT_PIN 5         // Left channel data out pin to LEDs
+# define LEFT_OUT_PIN 7         // Left channel data out pin to LEDs
 # define RIGHT_OUT_PIN 6        // Right channel data out pin to LEDs
-# define VU_OUT_PIN 2           // Vu meter channel data out pin to LEDs. This static LED strip can be used for anything else.
-# define LEFT_IN_PIN A4         // Left aux in signal
-# define RIGHT_IN_PIN A5        // Right aux in signal
-# define RD_LED 12              // Radio LED (the simple blue LED trigered by a NPN transistor)
+# define VU_OUT_PIN 5           // AUX - Vu meter channel data out pin to LEDs. This static LED strip can be used for anything else.
+# define LEFT_IN_PIN A5         // Left aux in signal
+# define RIGHT_IN_PIN A4        // Right aux in signal
+# define RD_LED 10              // LED (a simple LED trigered by a NPN transistor)
 # define BTN_PIN   3            // Push button on this pin
 # define N_PIXELS 44            // Number of pixels in each string
-# define N_PIXELS_VU 10         // Number of pixels in VU Meter led string
+# define N_PIXELS_VU 12         // Number of pixels in VU Meter led string
 # define COLOR_ORDER GRB        // Try mixing up the letters (RGB, GBR, BRG, etc) for a whole new world of color combinations
 # define BRIGHTNESS 200         // 0-255, higher number is brighter.
 # define LED_TYPE WS2812B       // Probably WS2812B
@@ -82,7 +82,9 @@ void buttonRelease() {
        if (!Powerup) {
         Powerup = !Powerup;
        }
-      buttonPushCounter = ++buttonPushCounter % 17;         // Change visuals
+      if (!autoChangeVisuals) {
+        buttonPushCounter = ++buttonPushCounter % 17;         // Change visuals
+        }
       EEPROM.write(0, buttonPushCounter);
       autoChangeVisuals = false;
       Serial.print("Short press: ");
@@ -119,7 +121,7 @@ void loop() {
         if(autoChangeVisuals){
         EVERY_N_SECONDS(PATTERN_TIME) { buttonPushCounter = ++buttonPushCounter % 17; }
             for(int dot = 0; dot < N_PIXELS_VU; dot++) { 
-            ledsVu[dot] = CRGB::Yellow; // VU Meter Color when Autochange
+            ledsVu[dot] = CRGB::Pink; // VU Meter Color when Autochange
              }
             }
         else {
@@ -132,76 +134,77 @@ void loop() {
   switch (buttonPushCounter) {
   
   case 0:
-    vu4(false, 0);
-    vu4(false, 1);
+    vu10(); //rolling leds (like tape)
     break;
 
   case 1:
-     vu4(true, 0);
-    vu4(true, 1);
-    break;
-
-  case 2:
-    vu5(false, 0);
-    vu5(false, 1);
-    break;
-
-  case 3:
-    vu5(true, 0);
+    vu5(true, 0);  // Vu Blue centered
     vu5(true, 1);
     break;
 
+  case 2:
+    juggle(); // Red meteors
+  break;
+
+  case 3:
+    vu6(false, 0); //Vu Meter Rainbow
+    vu6(false, 1);
+  break;
+
   case 4:
-      twinkle(); // dots
-    break;
+    sinelon(); //kitt effect 
+  break;
 
   case 5:
-      sinelon(); //kitt 
-    break;
+    vu7(false); //Flashs
+  break;
 
   case 6:
-    balls(); // bounding balls
+    twinkle(); // dots
     break;
 
   case 7:
-    juggle(); //
+    vu4(true, 0);  // Vu Green  centered
+    vu4(true, 1);
     break;
 
   case 8:
-    fire();
+    balls(); // bounding balls
     break;
   
   case 9:
-    vu6(false, 0);
-    vu6(false, 1);
-    break;
+    vu7(true); // Flash rings
+  break;
     
   case 10:
-    vu7(true);
-    break;
+    vu4(false, 0); // Vu Green not centered
+    vu4(false, 1);
+  break;
 
   case 11:
-    vu8();
+    rainbow(10); //..rainbow !
+  
     break;
 
   case 12:
-    vu9(); // rain / ocean wave
+    vu5(false, 0);  // Vu Violet not centered
+    vu5(false, 1);
     break;
 
   case 13:
-    vu10(); //rolling blue leds (like tape)
+    vu9(); // rain / ocean wave
     break;
   
   case 14:
-    vu7(false);
-    break;
+    vu8();// Three Mini VU
+  break;
 
   case 15:
-    ripple(false);
+    ripple(false);  //Ripples (drops waves)
     break;
 
   case 16:
-    rainbow(10);
+    fire(); //Fire
     break;
 
   }
