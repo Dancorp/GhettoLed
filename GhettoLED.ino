@@ -12,6 +12,10 @@
 # define LEFT_IN_PIN A5         // Left aux in signal
 # define RIGHT_IN_PIN A4        // Right aux in signal
 # define RD_LED 10              // LED (a simple LED trigered by a NPN transistor)
+# define VU_OUT_PIN 7           // Vu meter channel data out pin to LEDs. This static LED strip can be used for anything else.
+# define LEFT_IN_PIN A4         // Left aux in signal
+# define RIGHT_IN_PIN A5        // Right aux in signal
+# define RD_LED 12              // Radio LED (the simple blue LED trigered by a NPN transistor)
 # define BTN_PIN   3            // Push button on this pin
 # define N_PIXELS 44            // Number of pixels in each string
 # define N_PIXELS_VU 12         // Number of pixels in VU Meter led string
