@@ -5,6 +5,7 @@
 
 #include <FastLED.h>
 #include <EEPROM.h>
+#include "Button.h"
 
 # define LEFT_OUT_PIN 7         // Left channel data out pin to LEDs
 # define RIGHT_OUT_PIN 6        // Right channel data out pin to LEDs
@@ -17,6 +18,8 @@
 # define RIGHT_IN_PIN A5        // Right aux in signal
 # define RD_LED 12              // Radio LED (the simple blue LED trigered by a NPN transistor)
 # define BTN_PIN   3            // Push button on this pin
+# define DEBOUNCE_MS 20         // Number of ms to debounce the button 20 is default
+# define LONG_PRESS 500         // Number of ms to hold the button to count as long press
 # define N_PIXELS 44            // Number of pixels in each string
 # define N_PIXELS_VU 12         // Number of pixels in VU Meter led string
 # define COLOR_ORDER GRB        // Try mixing up the letters (RGB, GBR, BRG, etc) for a whole new world of color combinations
@@ -42,7 +45,6 @@ int lvlRight = 10; // Current "dampened" audio level
 int minLvlAvgRight = 0; // For dynamic adjustment of graph low & high
 int maxLvlAvgRight = 512;
 
-bool autoChangeVisuals = false;
 bool Powerup = false; //Bool de la gestion Marche Arret
 
 CRGB ledsLeft[N_PIXELS];
@@ -67,44 +69,15 @@ void twinkle();
 void rainbow(uint8_t rate);
 
 // --------------------
-// -- Btn Interrupt --
+// --- Button Stuff ---
 // --------------------
-
-long lastPress = 0;
-long lastRelease = 0;
-//int buttonPushCounter = (int)EEPROM.read(0); // load previous setting
+uint8_t state = 0;
 int buttonPushCounter = 0;
+bool autoChangeVisuals = false;
+Button modeBtn(BTN_PIN, DEBOUNCE_MS);
 
-void buttonRelease() {
-  if (millis() - lastRelease > 200) {         // Long press to toggle
-    if (millis() - lastPress >= 1000) {        // auto change visuals
-      Serial.println("Long press");
-      Powerup = !Powerup;
-      autoChangeVisuals = true;
-    }
-    else {
-       if (!Powerup) {
-        Powerup = !Powerup;
-       }
-      if (!autoChangeVisuals) {
-        buttonPushCounter = ++buttonPushCounter % 17;         // Change visuals
-        }
-      EEPROM.write(0, buttonPushCounter);
-      autoChangeVisuals = false;
-      Serial.print("Short press: ");
-      Serial.println(buttonPushCounter);
-    }
-    lastRelease = millis();
-    attachInterrupt(digitalPinToInterrupt(BTN_PIN), buttonPress, RISING);
-  }
-}
-
-void buttonPress() {
-  if (millis() - lastPress > 200) {
-    Serial.println("Button pressed");
-    lastPress = millis();
-    attachInterrupt(digitalPinToInterrupt(BTN_PIN), buttonRelease, FALLING);
-  }
+void incrementButtonPushCounter() {
+  buttonPushCounter = ++buttonPushCounter %17;
 }
 
 void setup() {
@@ -115,15 +88,41 @@ void setup() {
   FastLED.addLeds < LED_TYPE, VU_OUT_PIN, COLOR_ORDER > (ledsVu, N_PIXELS_VU).setCorrection(TypicalLEDStrip);
   FastLED.setBrightness(BRIGHTNESS);
   Serial.begin(57600);
-  attachInterrupt(digitalPinToInterrupt(BTN_PIN), buttonPress, RISING);
 }
 
 void loop() {
 
+  // Read button
+  modeBtn.read(); 
+  switch (state) {
+    case 0:                
+      if (modeBtn.wasReleased()) {
+        Serial.print("Short press, pattern ");
+        Serial.println(buttonPushCounter);
+        incrementButtonPushCounter();
+        autoChangeVisuals = false;
+      }
+      else if (modeBtn.pressedFor(LONG_PRESS))
+        state = 1;
+      break;
+    
+    case 1:
+      if (modeBtn.wasReleased()) {
+        state = 0;
+        Serial.print("Long press, auto, pattern ");
+        Serial.println(buttonPushCounter);
+        autoChangeVisuals = true;
+      }
+      break;
+  }
   if(Powerup){
         digitalWrite(RD_LED, HIGH); 
         if(autoChangeVisuals){
-        EVERY_N_SECONDS(PATTERN_TIME) { buttonPushCounter = ++buttonPushCounter % 17; }
+        EVERY_N_SECONDS(PATTERN_TIME) {
+          incrementButtonPushCounter();
+          Serial.print("Auto, pattern ");
+          Serial.println(buttonPushCounter); 
+        }
             for(int dot = 0; dot < N_PIXELS_VU; dot++) { 
             ledsVu[dot] = CRGB::Pink; // VU Meter Color when Autochange
              }
