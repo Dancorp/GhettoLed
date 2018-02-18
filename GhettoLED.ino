@@ -13,10 +13,6 @@
 # define LEFT_IN_PIN A5         // Left aux in signal
 # define RIGHT_IN_PIN A4        // Right aux in signal
 # define RD_LED 10              // LED (a simple LED trigered by a NPN transistor)
-# define VU_OUT_PIN 7           // Vu meter channel data out pin to LEDs. This static LED strip can be used for anything else.
-# define LEFT_IN_PIN A4         // Left aux in signal
-# define RIGHT_IN_PIN A5        // Right aux in signal
-# define RD_LED 12              // Radio LED (the simple blue LED trigered by a NPN transistor)
 # define BTN_PIN   3            // Push button on this pin
 # define DEBOUNCE_MS 20         // Number of ms to debounce the button 20 is default
 # define LONG_PRESS 500         // Number of ms to hold the button to count as long press
@@ -26,7 +22,7 @@
 # define BRIGHTNESS 200         // 0-255, higher number is brighter.
 # define LED_TYPE WS2812B       // Probably WS2812B
 # define DC_OFFSET 0            // DC offset in aux signal - if unusure, leave 0
-# define NOISE 10               // Noise/hum/interference in aux signal
+# define NOISE 25               // Noise/hum/interference in aux signal
 # define SAMPLES 64             // Length of buffer for dynamic level adjustment
 # define TOP (N_PIXELS + 2)     // Allow dot to go slightly off scale
 # define PEAK_FALL 10           // Rate of peak falling dot
@@ -99,7 +95,12 @@ void loop() {
       if (modeBtn.wasReleased()) {
         Serial.print("Short press, pattern ");
         Serial.println(buttonPushCounter);
+        if (!Powerup) {                 //Short press can power up without autochange
+            Powerup = !Powerup;
+            }
+        if (!autoChangeVisuals) {       // leaving autochange without changing pattern
         incrementButtonPushCounter();
+            }
         autoChangeVisuals = false;
       }
       else if (modeBtn.pressedFor(LONG_PRESS))
@@ -111,6 +112,7 @@ void loop() {
         state = 0;
         Serial.print("Long press, auto, pattern ");
         Serial.println(buttonPushCounter);
+        Powerup = !Powerup; // Long press always used to switch power (Auto / Off)
         autoChangeVisuals = true;
       }
       break;
