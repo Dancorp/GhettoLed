@@ -48,7 +48,8 @@ bool Powerup = false; //Bool for Power Management
 
 CRGB ledsLeft[N_PIXELS];
 CRGB ledsRight[N_PIXELS];
-CRGB ledsVu[N_PIXELS_AUX1];
+CRGB ledsAux1[N_PIXELS_AUX1];
+CRGB ledsAux2[N_PIXELS_AUX2];
 
 uint8_t myhue = 0;
 void clearleds();
@@ -84,7 +85,8 @@ void setup() {
   digitalWrite(RD_LED, LOW); 
   FastLED.addLeds < LED_TYPE, LEFT_OUT_PIN, COLOR_ORDER > (ledsLeft, N_PIXELS).setCorrection(TypicalLEDStrip);
   FastLED.addLeds < LED_TYPE, RIGHT_OUT_PIN, COLOR_ORDER > (ledsRight, N_PIXELS).setCorrection(TypicalLEDStrip);
-  FastLED.addLeds < LED_TYPE, AUX1_OUT_PIN, COLOR_ORDER > (ledsVu, N_PIXELS_AUX1).setCorrection(TypicalLEDStrip);
+  FastLED.addLeds < LED_TYPE, AUX1_OUT_PIN, COLOR_ORDER > (ledsAux1, N_PIXELS_AUX1).setCorrection(TypicalLEDStrip);
+  FastLED.addLeds < LED_TYPE, AUX2_OUT_PIN, COLOR_ORDER > (ledsAux2, N_PIXELS_AUX2).setCorrection(TypicalLEDStrip);
   FastLED.setBrightness(BRIGHTNESS);
   Serial.begin(57600);
 }
@@ -129,12 +131,18 @@ void loop() {
           Serial.println(buttonPushCounter); 
         }
             for(int dot = 0; dot < N_PIXELS_AUX1; dot++) { 
-            ledsVu[dot] = CRGB::Pink; // VU Meter Color when Autochange
+            ledsAux1[dot] = CRGB::Pink; // Aux1 Color when Autochange
+             }
+            for(int dot = 0; dot < N_PIXELS_AUX2; dot++) { 
+            ledsAux2[dot] = CRGB::Pink; // Aux2 Color when Autochange
              }
             }
         else {
-            for(int dot = 0; dot < N_PIXELS_AUX1; dot++) { 
-            ledsVu[dot] = CRGB::Orange; // VU Meter Color when Manual
+             for(int dot = 0; dot < N_PIXELS_AUX1; dot++) { 
+            ledsAux1[dot] = CRGB::Blue; // Aux1 Color when Autochange
+             }
+            for(int dot = 0; dot < N_PIXELS_AUX2; dot++) { 
+            ledsAux2[dot] = CRGB::Blue; // Aux2 Color when Manual
               }
         }
 
@@ -231,7 +239,10 @@ void loop() {
             ledsRight[dot] = CRGB::Black;
         }
         for(int dot = 0; dot < N_PIXELS_AUX1; dot++) { 
-            ledsVu[dot] = CRGB::Black;
+            ledsAux1[dot] = CRGB::Black;
+        }
+         for(int dot = 0; dot < N_PIXELS_AUX2; dot++) { 
+            ledsAux2[dot] = CRGB::Black;
         }
             FastLED.show();
 
