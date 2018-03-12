@@ -1,32 +1,35 @@
-// -----------------------------------------
-// -- GhettoLED  -- by Dancorp (France)
-// http://boomboxery.com/forum/index.php/topic/26495-evolved-led-mod-for-jvc-m70/
-// -----------------------------------------
+// -------------------------------------------------------
+// GhettoLED  -- by Dancorp (Fr) - Hardware Rev 1.2
+// -------------------------------------------------------
 
 #include <FastLED.h>
 #include <EEPROM.h>
 #include "Button.h"
-
+// I-O  pins
 # define LEFT_OUT_PIN 7         // Left channel data out pin to LEDs
 # define RIGHT_OUT_PIN 6        // Right channel data out pin to LEDs
-# define VU_OUT_PIN 5           // AUX - Vu meter channel data out pin to LEDs. This static LED strip can be used for anything else.
+# define AUX1_OUT_PIN 5         // AUX1 channel data out pin to LEDs.
+# define AUX2_OUT_PIN 4         // AUX2 channel data out pin to LEDs.
 # define LEFT_IN_PIN A5         // Left aux in signal
 # define RIGHT_IN_PIN A4        // Right aux in signal
 # define RD_LED 10              // LED (a simple LED trigered by a NPN transistor)
 # define BTN_PIN   3            // Push button on this pin
-# define DEBOUNCE_MS 20         // Number of ms to debounce the button 20 is default
-# define LONG_PRESS 500         // Number of ms to hold the button to count as long press
-# define N_PIXELS 44            // Number of pixels in each string
-# define N_PIXELS_VU 12         // Number of pixels in VU Meter led string
+// LED Parameters
+# define N_PIXELS 36            // Number of pixels in LEFT/RIGHT string
+# define N_PIXELS_AUX1 16       // Number of pixels in AUX1 string (prev. VU Meter string)
+# define N_PIXELS_AUX2 4        // Number of pixels in AUX2 string
 # define COLOR_ORDER GRB        // Try mixing up the letters (RGB, GBR, BRG, etc) for a whole new world of color combinations
 # define BRIGHTNESS 200         // 0-255, higher number is brighter.
 # define LED_TYPE WS2812B       // Probably WS2812B
+# define N_PIXELS_HALF (N_PIXELS / 2)
+# define TOP (N_PIXELS + 2)     // Allow dot to go slightly off scale
+// Script Parameters
 # define DC_OFFSET 0            // DC offset in aux signal - if unusure, leave 0
 # define NOISE 25               // Noise/hum/interference in aux signal
 # define SAMPLES 64             // Length of buffer for dynamic level adjustment
-# define TOP (N_PIXELS + 2)     // Allow dot to go slightly off scale
 # define PEAK_FALL 10           // Rate of peak falling dot
-# define N_PIXELS_HALF (N_PIXELS / 2)
+# define DEBOUNCE_MS 20         // Number of ms to debounce the button 20 is default
+# define LONG_PRESS 500         // Number of ms to hold the button to count as long press
 # define PATTERN_TIME 20         // Seconds to show eaach pattern on auto
 
 uint8_t volCountLeft = 0; // Frame counter for storing past volume data
@@ -41,11 +44,11 @@ int lvlRight = 10; // Current "dampened" audio level
 int minLvlAvgRight = 0; // For dynamic adjustment of graph low & high
 int maxLvlAvgRight = 512;
 
-bool Powerup = false; //Bool de la gestion Marche Arret
+bool Powerup = false; //Bool for Power Management
 
 CRGB ledsLeft[N_PIXELS];
 CRGB ledsRight[N_PIXELS];
-CRGB ledsVu[N_PIXELS_VU];
+CRGB ledsVu[N_PIXELS_AUX1];
 
 uint8_t myhue = 0;
 void clearleds();
@@ -81,7 +84,7 @@ void setup() {
   digitalWrite(RD_LED, LOW); 
   FastLED.addLeds < LED_TYPE, LEFT_OUT_PIN, COLOR_ORDER > (ledsLeft, N_PIXELS).setCorrection(TypicalLEDStrip);
   FastLED.addLeds < LED_TYPE, RIGHT_OUT_PIN, COLOR_ORDER > (ledsRight, N_PIXELS).setCorrection(TypicalLEDStrip);
-  FastLED.addLeds < LED_TYPE, VU_OUT_PIN, COLOR_ORDER > (ledsVu, N_PIXELS_VU).setCorrection(TypicalLEDStrip);
+  FastLED.addLeds < LED_TYPE, AUX1_OUT_PIN, COLOR_ORDER > (ledsVu, N_PIXELS_AUX1).setCorrection(TypicalLEDStrip);
   FastLED.setBrightness(BRIGHTNESS);
   Serial.begin(57600);
 }
@@ -125,12 +128,12 @@ void loop() {
           Serial.print("Auto, pattern ");
           Serial.println(buttonPushCounter); 
         }
-            for(int dot = 0; dot < N_PIXELS_VU; dot++) { 
+            for(int dot = 0; dot < N_PIXELS_AUX1; dot++) { 
             ledsVu[dot] = CRGB::Pink; // VU Meter Color when Autochange
              }
             }
         else {
-            for(int dot = 0; dot < N_PIXELS_VU; dot++) { 
+            for(int dot = 0; dot < N_PIXELS_AUX1; dot++) { 
             ledsVu[dot] = CRGB::Orange; // VU Meter Color when Manual
               }
         }
@@ -227,7 +230,7 @@ void loop() {
             ledsLeft[dot] = CRGB::Black;
             ledsRight[dot] = CRGB::Black;
         }
-        for(int dot = 0; dot < N_PIXELS_VU; dot++) { 
+        for(int dot = 0; dot < N_PIXELS_AUX1; dot++) { 
             ledsVu[dot] = CRGB::Black;
         }
             FastLED.show();
