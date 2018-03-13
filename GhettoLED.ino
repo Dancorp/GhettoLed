@@ -45,6 +45,9 @@ int minLvlAvgRight = 0; // For dynamic adjustment of graph low & high
 int maxLvlAvgRight = 512;
 
 bool Powerup = false; //Bool for Power Management
+static int16_t dist;                                          // A moving location for our noise generator.
+
+
 
 CRGB ledsLeft[N_PIXELS];
 CRGB ledsRight[N_PIXELS];
@@ -67,6 +70,9 @@ void ripple(boolean show_background);
 void sinelon();
 void twinkle();
 void rainbow(uint8_t rate);
+void auxnoise();
+void auxmeteorShower();
+
 
 // --------------------
 // --- Button Stuff ---
@@ -89,6 +95,7 @@ void setup() {
   FastLED.addLeds < LED_TYPE, AUX2_OUT_PIN, COLOR_ORDER > (ledsAux2, N_PIXELS_AUX2).setCorrection(TypicalLEDStrip);
   FastLED.setBrightness(BRIGHTNESS);
   Serial.begin(57600);
+  dist = random16(12345);  
 }
 
 void loop() {
@@ -130,23 +137,21 @@ void loop() {
           Serial.print("Auto, pattern ");
           Serial.println(buttonPushCounter); 
         }
-            for(int dot = 0; dot < N_PIXELS_AUX1; dot++) { 
-            ledsAux1[dot] = CRGB::Pink; // Aux1 Color when Autochange
-             }
+          
             for(int dot = 0; dot < N_PIXELS_AUX2; dot++) { 
             ledsAux2[dot] = CRGB::Pink; // Aux2 Color when Autochange
              }
             }
         else {
-             for(int dot = 0; dot < N_PIXELS_AUX1; dot++) { 
-            ledsAux1[dot] = CRGB::Blue; // Aux1 Color when Autochange
-             }
             for(int dot = 0; dot < N_PIXELS_AUX2; dot++) { 
             ledsAux2[dot] = CRGB::Blue; // Aux2 Color when Manual
               }
         }
+if (buttonPushCounter % 2)  { auxnoise(); } // noise mover effect on aux1 strip 
+else {auxmeteorShower(); } // auxmeteorshower on aux1 strip
 
-        
+
+      
   switch (buttonPushCounter) {
   
   case 0:
