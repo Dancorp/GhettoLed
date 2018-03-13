@@ -25,7 +25,7 @@
 # define TOP (N_PIXELS + 2)     // Allow dot to go slightly off scale
 // Script Parameters
 # define DC_OFFSET 0            // DC offset in aux signal - if unusure, leave 0
-# define NOISE 25               // Noise/hum/interference in aux signal
+# define NOISE 10               // Noise/hum/interference in aux signal
 # define SAMPLES 64             // Length of buffer for dynamic level adjustment
 # define PEAK_FALL 10           // Rate of peak falling dot
 # define DEBOUNCE_MS 20         // Number of ms to debounce the button 20 is default
@@ -148,7 +148,7 @@ void loop() {
               }
         }
 if (buttonPushCounter % 2)  { auxnoise(); } // noise mover effect on aux1 strip 
-else {auxmeteorShower(); } // auxmeteorshower on aux1 strip
+else {auxsinelon(); } // auxmeteorshower on aux1 strip
 
 
       
@@ -221,7 +221,7 @@ else {auxmeteorShower(); } // auxmeteorshower on aux1 strip
   break;
 
   case 15:
-    ripple(false);  //Ripples (drops waves)
+    ripple(true);  //Ripples (drops waves)
     break;
 
   case 16:
