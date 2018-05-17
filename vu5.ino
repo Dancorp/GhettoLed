@@ -34,13 +34,13 @@ void vu5(bool is_centered, uint8_t channel) {
         if (i > N_PIXELS_HALF - (N_PIXELS_HALF / 3)){
           //leds[N_PIXELS_HALF - i - 1] = CRGB::Red;
           //leds[N_PIXELS_HALF + i] = CRGB::Red;
-            leds[N_PIXELS - i - 1] = CRGB::Red;
+            leds[N_PIXELS - i - 1] = CRGB::SkyBlue;
             leds[i] = CRGB::Red;
         }
         else {
           //leds[N_PIXELS_HALF - i - 1] = CRGB::Blue;
           //leds[N_PIXELS_HALF + i] = CRGB::Blue;
-            leds[N_PIXELS - i - 1] = CRGB::Blue;
+            leds[N_PIXELS - i - 1] = CRGB::Yellow;
             leds[i] = CRGB::Blue;
         }
       }
@@ -51,12 +51,12 @@ void vu5(bool is_centered, uint8_t channel) {
       if (*peak > N_PIXELS_HALF - (N_PIXELS_HALF / 3)){
         //leds[N_PIXELS_HALF - *peak - 1] = CRGB::Red;
         //leds[N_PIXELS_HALF + *peak] = CRGB::Red;
-        leds[N_PIXELS - *peak - 1] = CRGB::Red;
+        leds[N_PIXELS - *peak - 1] = CRGB::SkyBlue;
         leds[*peak] = CRGB::Red;
       } else {
         //leds[N_PIXELS_HALF - *peak - 1] = CRGB::Green;
         //leds[N_PIXELS_HALF + *peak] = CRGB::Green;
-        leds[N_PIXELS - *peak - 1] = CRGB::Blue;
+        leds[N_PIXELS - *peak - 1] = CRGB::Yellow;
         leds[*peak] = CRGB::Blue;
       }
     }

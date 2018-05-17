@@ -11,7 +11,7 @@ void ripple(boolean show_background) {
     myhue++;
   }
   if (show_background) {
-    fill_solid(ledsLeft, N_PIXELS, CHSV(myhue, 255, 128));
+    fill_solid(ledsLeft, N_PIXELS, CRGB::Red);
   } else {
     fill_solid(ledsLeft, N_PIXELS, CRGB::Black);
   }
@@ -29,7 +29,7 @@ void ripple(boolean show_background) {
       rippleStep++;
     } else {
       if (rippleStep < MAX_STEPS) {
-        ledsLeft[wrap(rippleCenter + rippleStep)] = CHSV(rippleColor, 255, pow(RIPPLE_FADE_RATE, rippleStep) * 255); 
+        ledsLeft[wrap(rippleCenter + rippleStep)] = CHSV(rippleColor, 255, pow(RIPPLE_FADE_RATE, rippleStep) * 255);
         ledsLeft[wrap(rippleCenter - rippleStep)] = CHSV(rippleColor, 255, pow(RIPPLE_FADE_RATE, rippleStep) * 255);
         if (rippleStep > 3) {
           ledsLeft[wrap(rippleCenter + rippleStep - 3)] = CHSV(rippleColor, 255, pow(RIPPLE_FADE_RATE, rippleStep - 2) * 255);
@@ -46,7 +46,7 @@ void ripple(boolean show_background) {
   for (uint8_t i = 0; i < N_PIXELS; i++) {
     ledsRight[i] = ledsLeft[i];
   }
-  
+
   FastLED.show();
   delay(50);
 }

@@ -15,9 +15,9 @@
 # define RD_LED 10              // LED (a simple LED trigered by a NPN transistor)
 # define BTN_PIN   3            // Push button on this pin
 // LED Parameters
-# define N_PIXELS 36            // Number of pixels in LEFT/RIGHT string
-# define N_PIXELS_AUX1 16       // Number of pixels in AUX1 string (prev. VU Meter string)
-# define N_PIXELS_AUX2 4        // Number of pixels in AUX2 string
+# define N_PIXELS 34            // Number of pixels in LEFT/RIGHT string
+# define N_PIXELS_AUX1 30       // Number of pixels in AUX1 string (prev. VU Meter string)
+# define N_PIXELS_AUX2 10        // Number of pixels in AUX2 string
 # define COLOR_ORDER GRB        // Try mixing up the letters (RGB, GBR, BRG, etc) for a whole new world of color combinations
 # define BRIGHTNESS 200         // 0-255, higher number is brighter.
 # define LED_TYPE WS2812B       // Probably WS2812B
@@ -25,12 +25,12 @@
 # define TOP (N_PIXELS + 2)     // Allow dot to go slightly off scale
 // Script Parameters
 # define DC_OFFSET 0            // DC offset in aux signal - if unusure, leave 0
-# define NOISE 10               // Noise/hum/interference in aux signal
+# define NOISE 15               // Noise/hum/interference in aux signal
 # define SAMPLES 64             // Length of buffer for dynamic level adjustment
 # define PEAK_FALL 10           // Rate of peak falling dot
 # define DEBOUNCE_MS 20         // Number of ms to debounce the button 20 is default
 # define LONG_PRESS 500         // Number of ms to hold the button to count as long press
-# define PATTERN_TIME 20         // Seconds to show eaach pattern on auto
+# define PATTERN_TIME 30         // Seconds to show eaach pattern on auto
 
 uint8_t volCountLeft = 0; // Frame counter for storing past volume data
 int volLeft[SAMPLES]; // Collection of prior volume samples
@@ -72,7 +72,7 @@ void twinkle();
 void rainbow(uint8_t rate);
 void auxnoise();
 void auxmeteorShower();
-
+void auxfire();
 
 // --------------------
 // --- Button Stuff ---
@@ -130,25 +130,26 @@ void loop() {
       break;
   }
   if(Powerup){
+     
         digitalWrite(RD_LED, HIGH); 
         if(autoChangeVisuals){
-        EVERY_N_SECONDS(PATTERN_TIME) {
+          EVERY_N_SECONDS(PATTERN_TIME) {
           incrementButtonPushCounter();
           Serial.print("Auto, pattern ");
           Serial.println(buttonPushCounter); 
         }
           
-            for(int dot = 0; dot < N_PIXELS_AUX2; dot++) { 
-            ledsAux2[dot] = CRGB::Pink; // Aux2 Color when Autochange
+            for(int dot1 = 0; dot1 < N_PIXELS_AUX2; dot1++) { 
+            ledsAux2[dot1] = CRGB::White; // Aux2 Color when Autochange
              }
             }
         else {
             for(int dot = 0; dot < N_PIXELS_AUX2; dot++) { 
-            ledsAux2[dot] = CRGB::Blue; // Aux2 Color when Manual
+            ledsAux2[dot] = CRGB::Orange; // Aux2 Color when Manual
               }
         }
-if (buttonPushCounter % 2)  { auxnoise(); } // noise mover effect on aux1 strip 
-else {auxsinelon(); } // auxmeteorshower on aux1 strip
+if (buttonPushCounter % 2)  {  auxfire();} // noise mover effect on aux1 strip 
+else {auxsinelon();} // auxmeteorshower on aux1 strip
 
 
       
