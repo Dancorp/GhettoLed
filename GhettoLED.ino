@@ -70,9 +70,11 @@ void ripple(boolean show_background);
 void sinelon();
 void twinkle();
 void rainbow(uint8_t rate);
+//Aux1 Effects
 void auxnoise();
-void auxmeteorShower();
+void auxmeteor();
 void auxfire();
+void auxsinelon();
 
 // --------------------
 // --- Button Stuff ---
