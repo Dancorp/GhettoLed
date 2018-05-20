@@ -1,4 +1,4 @@
-void meteorRain(byte red, byte green, byte blue, byte meteorSize, byte meteorTrailDecay, boolean meteorRandomDecay, int SpeedDelay) {  
+void meteorRain(byte meteorSize, byte meteorTrailDecay, boolean meteorRandomDecay, int SpeedDelay) {  
 
 for(int i = 0; i < N_PIXELS_AUX1; i++ ) {
   ledsAux1[i] = CRGB::Black;
@@ -17,7 +17,13 @@ FastLED.show();
     // draw meteor
     for(int j = 0; j < meteorSize; j++) {
       if( ( i-j <N_PIXELS_AUX1) && (i-j>=0) ) {
-        ledsAux1[i-j] = CRGB(red, green, blue);
+        ledsAux1[i-j] = CHSV(myhue2, 255, 255);
+     // ledsAux1[i-j] = CRGB::Red;
+     
+        EVERY_N_MILLISECONDS(120) {
+        myhue2++;
+        }
+        
        } 
     }
    

@@ -55,6 +55,7 @@ CRGB ledsAux1[N_PIXELS_AUX1];
 CRGB ledsAux2[N_PIXELS_AUX2];
 
 uint8_t myhue = 0;
+uint8_t myhue2 = 0;
 void clearleds();
 void vu4(bool is_centered, uint8_t channel);
 void vu5(bool is_centered, uint8_t channel);
@@ -72,7 +73,7 @@ void twinkle();
 void rainbow(uint8_t rate);
 //Aux1 Effects
 void auxnoise();
-void auxmeteor();
+void auxmeteor(byte meteorSize, byte meteorTrailDecay, boolean meteorRandomDecay, int SpeedDelay);
 void auxfire();
 void auxsinelon();
 
