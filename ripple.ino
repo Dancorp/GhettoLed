@@ -11,7 +11,7 @@ void ripple(boolean show_background) {
     myhue++;
   }
   if (show_background) {
-    fill_solid(ledsLeft, N_PIXELS, CRGB::Red);
+    fill_solid(ledsLeft, N_PIXELS, CRGB::Blue);
   } else {
     fill_solid(ledsLeft, N_PIXELS, CRGB::Black);
   }

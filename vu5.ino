@@ -34,14 +34,14 @@ void vu5(bool is_centered, uint8_t channel) {
         if (i > N_PIXELS_HALF - (N_PIXELS_HALF / 3)){
           //leds[N_PIXELS_HALF - i - 1] = CRGB::Red;
           //leds[N_PIXELS_HALF + i] = CRGB::Red;
-            leds[N_PIXELS - i - 1] = CRGB::SkyBlue;
-            leds[i] = CRGB::Red;
+            leds[N_PIXELS - i - 1] = CRGB::Yellow;
+            leds[i] = CRGB::Yellow;
         }
         else {
           //leds[N_PIXELS_HALF - i - 1] = CRGB::Blue;
           //leds[N_PIXELS_HALF + i] = CRGB::Blue;
-            leds[N_PIXELS - i - 1] = CRGB::Yellow;
-            leds[i] = CRGB::Blue;
+            leds[N_PIXELS - i - 1] = CRGB(255, 0, 255);
+            leds[i] = CRGB(51, 153, 255);
         }
       }
     }
@@ -51,13 +51,13 @@ void vu5(bool is_centered, uint8_t channel) {
       if (*peak > N_PIXELS_HALF - (N_PIXELS_HALF / 3)){
         //leds[N_PIXELS_HALF - *peak - 1] = CRGB::Red;
         //leds[N_PIXELS_HALF + *peak] = CRGB::Red;
-        leds[N_PIXELS - *peak - 1] = CRGB::SkyBlue;
-        leds[*peak] = CRGB::Red;
+        leds[N_PIXELS - *peak - 1] = CRGB::White;
+        leds[*peak] = CRGB::White;
       } else {
         //leds[N_PIXELS_HALF - *peak - 1] = CRGB::Green;
         //leds[N_PIXELS_HALF + *peak] = CRGB::Green;
         leds[N_PIXELS - *peak - 1] = CRGB::Yellow;
-        leds[*peak] = CRGB::Blue;
+        leds[*peak] = CRGB::Yellow;
       }
     }
     
@@ -65,14 +65,14 @@ void vu5(bool is_centered, uint8_t channel) {
     // Color pixels based on old school green/red vu
     for (uint8_t i = 0; i < N_PIXELS; i++) {
       if (i >= height) leds[i] = CRGB::Black;
-      else if (i > N_PIXELS - (N_PIXELS / 3)) leds[i] = CRGB::DarkViolet;
-      else leds[i] = CRGB::Magenta;
+      else if (i > N_PIXELS - (N_PIXELS / 3)) leds[i] = CRGB::Yellow;
+      else leds[i] = CRGB::Yellow;
     }
   
     // Draw peak dot
     if (*peak > 0 && *peak <= N_PIXELS - 1)
-      if (*peak > N_PIXELS - (N_PIXELS / 3)) leds[*peak] = CRGB::DarkViolet;
-      else leds[*peak] = CRGB::Magenta;
+      if (*peak > N_PIXELS - (N_PIXELS / 3)) leds[*peak] = CRGB::Yellow;
+      else leds[*peak] = CRGB::Yellow;
   }
   
   dropPeak(channel);
