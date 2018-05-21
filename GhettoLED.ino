@@ -14,15 +14,17 @@
 # define RIGHT_IN_PIN A4        // Right aux in signal
 # define RD_LED 10              // LED (a simple LED trigered by a NPN transistor)
 # define BTN_PIN   3            // Push button on this pin
-// LED Parameters
-# define N_PIXELS 34            // Number of pixels in LEFT/RIGHT string
-# define N_PIXELS_AUX1 30       // Number of pixels in AUX1 string (prev. VU Meter string)
+
+// LED Parameters (Warning : set up more than 120 led can cause unexcepted crashs)
+# define N_PIXELS 44            // Number of pixels in LEFT/RIGHT string
+# define N_PIXELS_AUX1 20       // Number of pixels in AUX1 string (prev. VU Meter string)
 # define N_PIXELS_AUX2 10        // Number of pixels in AUX2 string
 # define COLOR_ORDER GRB        // Try mixing up the letters (RGB, GBR, BRG, etc) for a whole new world of color combinations
 # define BRIGHTNESS 200         // 0-255, higher number is brighter.
 # define LED_TYPE WS2812B       // Probably WS2812B
 # define N_PIXELS_HALF (N_PIXELS / 2)
 # define TOP (N_PIXELS + 2)     // Allow dot to go slightly off scale
+
 // Script Parameters
 # define DC_OFFSET 0            // DC offset in aux signal - if unusure, leave 0
 # define NOISE 15               // Noise/hum/interference in aux signal
@@ -77,17 +79,13 @@ void auxmeteor(byte meteorSize, byte meteorTrailDecay, boolean meteorRandomDecay
 void auxfire();
 void auxsinelon();
 
-// --------------------
-// --- Button Stuff ---
-// --------------------
+
+//  Button Stuff 
 uint8_t state = 0;
 int buttonPushCounter = 0;
 bool autoChangeVisuals = false;
 Button modeBtn(BTN_PIN, DEBOUNCE_MS);
 
-void incrementButtonPushCounter() {
-  buttonPushCounter = ++buttonPushCounter %17;
-}
 
 void setup() {
   delay(2000); // power-up safety delay
@@ -101,23 +99,30 @@ void setup() {
   dist = random16(12345);  
 }
 
-void loop() {
 
-  // Read button
+//----------------------
+// Main Program aka loop
+//----------------------
+
+
+void loop() {
+  
+// Button State Managment
   modeBtn.read(); 
   switch (state) {
+    
     case 0:                
       if (modeBtn.wasReleased()) {
         Serial.print("Short press, pattern ");
         Serial.println(buttonPushCounter);
         if (!Powerup) {                 //Short press can power up without autochange
-            Powerup = !Powerup;
+          Powerup = !Powerup;
             }
         if (!autoChangeVisuals) {       // leaving autochange without changing pattern
-        incrementButtonPushCounter();
+          incrementButtonPushCounter();
             }
         autoChangeVisuals = false;
-      }
+        }
       else if (modeBtn.pressedFor(LONG_PRESS))
         state = 1;
       break;
@@ -132,139 +137,146 @@ void loop() {
       }
       break;
   }
-  if(Powerup){
-     
-        digitalWrite(RD_LED, HIGH); 
-        if(autoChangeVisuals){
-          EVERY_N_SECONDS(PATTERN_TIME) {
-          incrementButtonPushCounter();
-          Serial.print("Auto, pattern ");
-          Serial.println(buttonPushCounter); 
+
+// LIGHTS ON
+if(Powerup){
+  digitalWrite(RD_LED, HIGH); 
+  if(autoChangeVisuals){
+     EVERY_N_SECONDS(PATTERN_TIME) {
+        incrementButtonPushCounter();
+        Serial.print("Auto, pattern ");
+        Serial.println(buttonPushCounter); 
         }
-          
-            for(int dot1 = 0; dot1 < N_PIXELS_AUX2; dot1++) { 
-            ledsAux2[dot1] = CRGB::White; // Aux2 Color when Autochange
-             }
-            }
-        else {
-            for(int dot = 0; dot < N_PIXELS_AUX2; dot++) { 
-            ledsAux2[dot] = CRGB::Orange; // Aux2 Color when Manual
-              }
+    for(int dot1 = 0; dot1 < N_PIXELS_AUX2; dot1++) {
+      ledsAux2[dot1] = CRGB::White; // Aux2 Color when Autochange
         }
-if (buttonPushCounter % 2)  {  auxfire();} // noise mover effect on aux1 strip 
-else {auxsinelon();} // auxmeteorshower on aux1 strip
-
-
-      
-  switch (buttonPushCounter) {
-  
-  case 0:
-    vu10(); //rolling leds (like tape)
-    break;
-
-  case 1:
-    vu5(true, 0);  // Vu Blue centered
-    vu5(true, 1);
-    break;
-
-  case 2:
-    juggle(); // Red meteors
-  break;
-
-  case 3:
-    vu6(false, 0); //Vu Meter Rainbow
-    vu6(false, 1);
-  break;
-
-  case 4:
-    sinelon(); //kitt effect 
-  break;
-
-  case 5:
-    vu7(false); //Flashs
-  break;
-
-  case 6:
-    twinkle(); // dots
-    break;
-
-  case 7:
-    vu4(true, 0);  // Vu Green  centered
-    vu4(true, 1);
-    break;
-
-  case 8:
-    balls(); // bounding balls
-    break;
-  
-  case 9:
-    vu7(true); // Flash rings
-  break;
-    
-  case 10:
-    vu4(false, 0); // Vu Green not centered
-    vu4(false, 1);
-  break;
-
-  case 11:
-    rainbow(10, true, 40); //..rainbow !
-  
-    break;
-
-  case 12:
-    vu5(false, 0);  // Vu Violet not centered
-    vu5(false, 1);
-    break;
-
-  case 13:
-    vu9(); // rain / ocean wave
-    break;
-  
-  case 14:
-    vu8();// Three Mini VU
-  break;
-
-  case 15:
-    ripple(true);  //Ripples (drops waves)
-    break;
-
-  case 16:
-    fire(); //Fire
-    break;
-
-  }
-  }
+     }
   else {
-     clearleds();
-     digitalWrite(RD_LED, LOW); // Turn off the Radio LED
+    for(int dot = 0; dot < N_PIXELS_AUX2; dot++) { 
+      ledsAux2[dot] = CRGB::Orange; // Aux2 Color when Manual
+      }
+  }
+
+  // AUX1 Effects Managment     
+  if (buttonPushCounter % 2)  {  auxfire();} // noise mover effect on aux1 strip 
+  else {auxsinelon();} // auxmeteorshower on aux1 strip
+
+  // Effects Switcher
+  switch (buttonPushCounter) {
+    case 0:
+      vu10(); //rolling leds (like tape)
+    break;
+
+    case 1:
+      vu5(true, 0);  // Vu Blue centered
+      vu5(true, 1);
+      break;
+      
+    case 2:
+      juggle(); // Red meteors
+      break;
+
+    case 3:
+      vu6(false, 0); //Vu Meter Rainbow
+      vu6(false, 1);
+      break;
+
+    case 4:
+      sinelon(); //kitt effect 
+      break;
+
+    case 5:
+      vu7(false); //Flashs
+      break;
+
+    case 6:
+      twinkle(); // dots
+      break;
+
+    case 7:
+      vu4(true, 0);  // Vu Green  centered
+      vu4(true, 1);
+      break;
+
+    case 8:
+      balls(); // bounding balls
+      break;
+  
+    case 9:
+      vu7(true); // Flash rings
+      break;
+    
+    case 10:
+      vu4(false, 0); // Vu Green not centered
+      vu4(false, 1);
+      break;
+
+    case 11:
+      rainbow(10, false, 80); //..rainbow !
+      break;
+
+    case 12:
+      vu5(false, 0);  // Vu Violet not centered
+      vu5(false, 1);
+      break;
+
+    case 13:
+      vu9(); // rain / ocean wave
+      break;
+  
+    case 14:
+      vu8();// Three Mini VU
+      break;
+
+    case 15:
+      ripple(true);  //Ripples (drops waves)
+      break;
+
+    case 16:
+      fire(); //Fire
+      break;
+
+    }
+}
+
+ // LIGHTS OFF
+else {
+  clearleds();
+  digitalWrite(RD_LED, LOW); // Turn off the Radio LED
 
   }
-  }
+}
+
+//------------------------
+// Button Counter Function
+//------------------------
+void incrementButtonPushCounter() {
+  buttonPushCounter = ++buttonPushCounter %17;
+}
 
 
-   void clearleds() { // Turn off all LEDs 
-        for(int dot = 0; dot < N_PIXELS; dot++) { 
-            ledsLeft[dot] = CRGB::Black;
-            ledsRight[dot] = CRGB::Black;
-        }
-        for(int dot = 0; dot < N_PIXELS_AUX1; dot++) { 
-            ledsAux1[dot] = CRGB::Black;
-        }
-         for(int dot = 0; dot < N_PIXELS_AUX2; dot++) { 
-            ledsAux2[dot] = CRGB::Black;
-        }
-            FastLED.show();
-
-        }
+//-----------------------------
+// Turn Off LED strips Function
+//-----------------------------
+void clearleds() { // Turn off all LEDs 
+   for(int dot = 0; dot < N_PIXELS; dot++) { 
+       ledsLeft[dot] = CRGB::Black;
+       ledsRight[dot] = CRGB::Black;
+       }
+   for(int dot = 0; dot < N_PIXELS_AUX1; dot++) { 
+       ledsAux1[dot] = CRGB::Black;
+       }
+   for(int dot = 0; dot < N_PIXELS_AUX2; dot++) { 
+       ledsAux2[dot] = CRGB::Black;
+       }
+   FastLED.show();
+   }
     
 
 
-
-
-// ------------------
-// -- VU functions --
-// ------------------
-
+//----------------------
+// Line In Read Function
+//----------------------
 uint16_t auxReading(uint8_t channel) {
 
   int n = 0;
@@ -298,9 +310,9 @@ uint16_t auxReading(uint8_t channel) {
   return height;
 }
 
-/*
- * Function for dropping the peak
- */
+//--------------------
+// Peak Drop  function
+//--------------------
 uint8_t peakLeft, peakRight;
 void dropPeak(uint8_t channel) {
   
@@ -319,9 +331,9 @@ void dropPeak(uint8_t channel) {
   }
 }
 
-/*
- * Function for averaging the sample readings
- */
+//-------------------------------------------
+// Function for averaging the sample readings
+//-------------------------------------------
 void averageReadings(uint8_t channel) {
 
   uint16_t minLvl, maxLvl;
