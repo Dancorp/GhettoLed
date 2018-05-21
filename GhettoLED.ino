@@ -70,7 +70,7 @@ void juggle();
 void ripple(boolean show_background);
 void sinelon();
 void twinkle();
-void rainbow(uint8_t rate);
+void rainbow(uint8_t rate, boolean Glitter, fract8 chanceOfGlitter);
 //Aux1 Effects
 void auxnoise();
 void auxmeteor(byte meteorSize, byte meteorTrailDecay, boolean meteorRandomDecay, int SpeedDelay);
@@ -207,7 +207,7 @@ else {auxsinelon();} // auxmeteorshower on aux1 strip
   break;
 
   case 11:
-    rainbow(10); //..rainbow !
+    rainbow(10, true, 40); //..rainbow !
   
     break;
 
