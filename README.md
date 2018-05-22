@@ -15,8 +15,8 @@
 - Can Manage : 2 "Stereo" Led Strips et 2 additionals Strips (Aux1 for a pattern, Aux2 for the "mode" color)
 
 ## What's it look like?
-GhettoLED Rev1.0 on a JVC M70 : https://youtu.be/DNqbE8rCtKw
-GhettoLED Rev1.2 on a National RS-4150 : https://www.facebook.com/NeoFunkyBlaster/videos/451267188665635/
+- GhettoLED Rev1.0 on a JVC M70 : https://youtu.be/DNqbE8rCtKw
+- GhettoLED Rev1.2 on a National RS-4150 : https://www.facebook.com/NeoFunkyBlaster/videos/451267188665635/
  
 ## Compatible devices
 Every boombox equiped with a lineout can be upgraded.
