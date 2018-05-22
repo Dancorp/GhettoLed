@@ -27,7 +27,7 @@
 
 // Script Parameters
 # define DC_OFFSET 0            // DC offset in aux signal - if unusure, leave 0
-# define NOISE 15               // Noise/hum/interference in aux signal
+# define NOISE 10               // Noise/hum/interference in aux signal
 # define SAMPLES 64             // Length of buffer for dynamic level adjustment
 # define PEAK_FALL 10           // Rate of peak falling dot
 # define DEBOUNCE_MS 20         // Number of ms to debounce the button 20 is default
@@ -47,6 +47,8 @@ int minLvlAvgRight = 0; // For dynamic adjustment of graph low & high
 int maxLvlAvgRight = 512;
 
 bool Powerup = false; //Bool for Power Management
+bool autoChangeVisuals = false;
+bool RandomVisuals = false;
 static int16_t dist;                                          // A moving location for our noise generator.
 
 
@@ -83,7 +85,6 @@ void auxsinelon();
 //  Button Stuff 
 uint8_t state = 0;
 int buttonPushCounter = 0;
-bool autoChangeVisuals = false;
 Button modeBtn(BTN_PIN, DEBOUNCE_MS);
 
 
@@ -115,13 +116,17 @@ void loop() {
       if (modeBtn.wasReleased()) {
         Serial.print("Short press, pattern ");
         Serial.println(buttonPushCounter);
+        RandomVisuals = false;
         if (!Powerup) {                 //Short press can power up without autochange
           Powerup = !Powerup;
+          autoChangeVisuals = true;
             }
-        if (!autoChangeVisuals) {       // leaving autochange without changing pattern
+        else if (Powerup && autoChangeVisuals) {       // leaving autochange without changing pattern
+          autoChangeVisuals = false;
+        }
+        else {
           incrementButtonPushCounter();
             }
-        autoChangeVisuals = false;
         }
       else if (modeBtn.pressedFor(LONG_PRESS))
         state = 1;
@@ -133,7 +138,7 @@ void loop() {
         Serial.print("Long press, auto, pattern ");
         Serial.println(buttonPushCounter);
         Powerup = !Powerup; // Long press always used to switch power (Auto / Off)
-        autoChangeVisuals = true;
+        RandomVisuals = true;
       }
       break;
   }
@@ -151,6 +156,18 @@ if(Powerup){
       ledsAux2[dot1] = CRGB::White; // Aux2 Color when Autochange
         }
      }
+
+   else if (RandomVisuals) {
+     EVERY_N_SECONDS(PATTERN_TIME) {
+        buttonPushCounter = random(0,16);
+        Serial.print("Random, pattern ");
+        Serial.println(buttonPushCounter); 
+        }
+ 
+    for(int dot = 0; dot < N_PIXELS_AUX2; dot++) { 
+      ledsAux2[dot] = CRGB::Yellow; // Aux2 Color when Random
+      }
+    }
   else {
     for(int dot = 0; dot < N_PIXELS_AUX2; dot++) { 
       ledsAux2[dot] = CRGB::Orange; // Aux2 Color when Manual
