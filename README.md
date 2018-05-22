@@ -10,7 +10,9 @@
 - Stereo sound responsive from lineout
 - Works on any sources
 - A switch allow to turn lights on/off and change pattern.
-- Manual or Autochange patterns
+- Customisable effects
+- Manual, Autochange, Random patterns
+- Can Manage : 2 "Stereo" Led Strips et 2 additionals Strips (Aux1 for a pattern, Aux2 for the "mode" color)
 
 ## What's it look like?
 GhettoLED Rev1.0 on a JVC M70 : https://youtu.be/DNqbE8rCtKw
@@ -31,11 +33,11 @@ The challenge is about led integration. (speakers/grid shape) but they can be pl
 ## How to use it
 By default, all lights are turned off.
 A short press on button allows to:
-- Turn on the lights in manual mode
-- Manually change the pattern.
+- Turn on the lights in Auto mode (predefined sequence)
+- Switch to Manual mode and select the next pattern.
 
 A long press on button allows to:
-- Turn on the lights in auto mode
+- Turn on the lights in Random mode
 - Turn off the lights
 
 ## What i need to make it ?
@@ -57,6 +59,7 @@ https://www.ebay.com/itm/263092669047
 - Most templates have been created for a linear system. If some have a correct visual rendering, others would need to be adapted to the round shape. (-fire- for exemple)
 Anyone can propose modified or original templates.
 - Regarding electronics, I need tips on filtering to remove power supply and LED noise.
+- Looking for a way to turn off light when a silence is detected during a predefined time. (a kind of autostop)
 
 ## Resources
 - Some pics for the JVC M70 integration : https://photos.app.goo.gl/I8EfIdO2DLxacI033
@@ -64,7 +67,7 @@ Anyone can propose modified or original templates.
 
 
 
-## Original Topic on Boomboxery
+## Original Topic on Boomboxery (not updated anymore)
 http://boomboxery.com/forum/index.php/topic/26495-evolved-led-mod-for-jvc-m70/
 
 
