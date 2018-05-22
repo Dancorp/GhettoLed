@@ -16,6 +16,7 @@
 
 ## What's it look like?
 GhettoLED Rev1.0 on a JVC M70 : https://youtu.be/DNqbE8rCtKw
+GhettoLED Rev1.2 on a National RS-4150 : https://www.facebook.com/NeoFunkyBlaster/videos/451267188665635/
  
 ## Compatible devices
 Every boombox equiped with a lineout can be upgraded.
