@@ -1,3 +1,9 @@
+Changelog
+05/23/2018 : Adding Autostandby Mode to turn on/off lights automaticly (based on volume level)
+05/21/2018 : Adding Random Mode on pattern/Vu sequence.
+04/2018 : Adding more Aux1 patterns
+
+
 ![GhettoLed on a JVC M70](https://hackadaycom.files.wordpress.com/2018/01/ghettoled_boombox_arduino_led_strips.jpg)
 
 
@@ -34,11 +40,11 @@ The challenge is about led integration. (speakers/grid shape) but they can be pl
 ## How to use it
 By default, all lights are turned off.
 A short press on button allows to:
-- Turn on the lights in Auto mode (predefined sequence)
-- Switch to Manual mode and select the next pattern.
+- Turn on the lights in Auto Standby Mode
+- Switch Pattern selection from Auto Change to Random Change and finally to Manual mode by selecting the next pattern.
 
 A long press on button allows to:
-- Turn on the lights in Random mode
+- Turn on the lights in Always On Mode
 - Turn off the lights
 
 ## What i need to make it ?
