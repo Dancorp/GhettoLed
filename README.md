@@ -1,7 +1,7 @@
 Changelog
-05/23/2018 : Adding Autostandby Mode to turn on/off lights automaticly (based on volume level)
-05/21/2018 : Adding Random Mode on pattern/Vu sequence.
-04/2018 : Adding more Aux1 patterns
+- 05/23/2018 : Adding Autostandby Mode to turn on/off lights automaticly (based on volume level)
+- 05/21/2018 : Adding Random Mode on pattern/Vu sequence.
+- 04/2018 : Adding more Aux1 patterns
 
 
 ![GhettoLed on a JVC M70](https://hackadaycom.files.wordpress.com/2018/01/ghettoled_boombox_arduino_led_strips.jpg)
