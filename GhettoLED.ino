@@ -33,6 +33,8 @@
 # define DEBOUNCE_MS 20         // Number of ms to debounce the button 20 is default
 # define LONG_PRESS 500         // Number of ms to hold the button to count as long press
 # define PATTERN_TIME 30         // Seconds to show eaach pattern on auto
+# define STANDBY_TIME 5         // Seconds to go to standby mode.
+# define STANDBY_LVL  20         // Silence threshold for auto standby mgmt
 
 uint8_t volCountLeft = 0; // Frame counter for storing past volume data
 int volLeft[SAMPLES]; // Collection of prior volume samples
@@ -45,13 +47,10 @@ int volRight[SAMPLES]; // Collection of prior volume samples
 int lvlRight = 10; // Current "dampened" audio level
 int minLvlAvgRight = 0; // For dynamic adjustment of graph low & high
 int maxLvlAvgRight = 512;
-
-bool Powerup = false; //Bool for Power Management
+int Power = 0;
+uint8_t Sleeptime = 0;
 bool autoChangeVisuals = false;
 bool RandomVisuals = false;
-static int16_t dist;                                          // A moving location for our noise generator.
-
-
 
 CRGB ledsLeft[N_PIXELS];
 CRGB ledsRight[N_PIXELS];
@@ -87,6 +86,7 @@ uint8_t state = 0;
 int buttonPushCounter = 0;
 Button modeBtn(BTN_PIN, DEBOUNCE_MS);
 
+ //Bool for Power Management
 
 void setup() {
   delay(2000); // power-up safety delay
@@ -97,7 +97,6 @@ void setup() {
   FastLED.addLeds < LED_TYPE, AUX2_OUT_PIN, COLOR_ORDER > (ledsAux2, N_PIXELS_AUX2).setCorrection(TypicalLEDStrip);
   FastLED.setBrightness(BRIGHTNESS);
   Serial.begin(57600);
-  dist = random16(12345);  
 }
 
 
@@ -105,6 +104,13 @@ void setup() {
 // Main Program aka loop
 //----------------------
 
+/* ---Power managment inforamtions---
+ * Done using the Power variable 
+ * Power = 0 All Lights Off
+ * Power = 1 AutoStandby Mode (Off) But Led is still up
+ * Power = 2 AutoStandby Mode (On)
+ * Power = 3 All Lights On whatever the volume level.
+ */
 
 void loop() {
   
@@ -114,19 +120,23 @@ void loop() {
     
     case 0:                
       if (modeBtn.wasReleased()) {
-        Serial.print("Short press, pattern ");
-        Serial.println(buttonPushCounter);
         RandomVisuals = false;
-        if (!Powerup) {                 //Short press can power up without autochange
-          Powerup = !Powerup;
+        if (Power==0) {                 //Short press can power up in standby mode
+          Power = 2;
+          Serial.println("--Power On Standby--");
           autoChangeVisuals = true;
+          Serial.println("-Mode Auto-");
             }
-        else if (Powerup && autoChangeVisuals) {       // leaving autochange without changing pattern
+        else if (Power > 1 && autoChangeVisuals) {       // leaving autochange without changing pattern
           autoChangeVisuals = false;
+          RandomVisuals = true;
+          Serial.println("-Mode Random-");
         }
-        else {
-          incrementButtonPushCounter();
-            }
+        else if (Power > 1 && RandomVisuals) {
+          RandomVisuals = false;
+        Serial.println("-Mode Manual-");
+        }
+        else  {incrementButtonPushCounter(); }
         }
       else if (modeBtn.pressedFor(LONG_PRESS))
         state = 1;
@@ -135,22 +145,41 @@ void loop() {
     case 1:
       if (modeBtn.wasReleased()) {
         state = 0;
-        Serial.print("Long press, auto, pattern ");
-        Serial.println(buttonPushCounter);
-        Powerup = !Powerup; // Long press always used to switch power (Auto / Off)
-        RandomVisuals = true;
+   
+        if (Power==0) {
+          Power=3;
+           Serial.println("--Power On Forced--");
+          }
+        else {
+          Power = 0;
+           Serial.println("--Power Off--");
+          } // Long press always used to switch power (Auto / Off)
+        
       }
       break;
   }
 
+
+
+
+
+
+
+
+
 // LIGHTS ON
-if(Powerup){
-  digitalWrite(RD_LED, HIGH); 
+
+ if(Power > 0 && Power < 3)
+ { 
+  EVERY_N_SECONDS(1) {sleepmgnt(STANDBY_TIME);}
+  }
+
+if (Power >0){digitalWrite(RD_LED, HIGH);}
+
+if(Power > 1){
   if(autoChangeVisuals){
      EVERY_N_SECONDS(PATTERN_TIME) {
         incrementButtonPushCounter();
-        Serial.print("Auto, pattern ");
-        Serial.println(buttonPushCounter); 
         }
     for(int dot1 = 0; dot1 < N_PIXELS_AUX2; dot1++) {
       ledsAux2[dot1] = CRGB::White; // Aux2 Color when Autochange
@@ -160,8 +189,6 @@ if(Powerup){
    else if (RandomVisuals) {
      EVERY_N_SECONDS(PATTERN_TIME) {
         buttonPushCounter = random(0,16);
-        Serial.print("Random, pattern ");
-        Serial.println(buttonPushCounter); 
         }
  
     for(int dot = 0; dot < N_PIXELS_AUX2; dot++) { 
@@ -288,8 +315,35 @@ void clearleds() { // Turn off all LEDs
        }
    FastLED.show();
    }
-    
 
+//----------------------
+// Auto Standby Function
+//----------------------
+
+void sleepmgnt(uint8_t time) {
+uint16_t avgsound;
+
+averageReadings(0);
+averageReadings(1);
+avgsound = (auxReading(0) + auxReading(1)) *100 ;
+
+//Serial.print("Avg Volume ");
+//Serial.println(avgsound);
+
+if (Power == 2 && avgsound < STANDBY_LVL) {
+   if (Sleeptime < time){
+    Serial.print("Timer ");
+    Serial.println(Sleeptime);
+    Sleeptime++;}
+   else {
+    Power = 1;
+    Sleeptime = 0;}
+  }
+if (Power == 1 &&  avgsound > STANDBY_LVL) {
+  Power = 2;
+}
+  
+}
 
 //----------------------
 // Line In Read Function
