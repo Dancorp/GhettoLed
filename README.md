@@ -32,10 +32,12 @@ The challenge is about led integration. (speakers/grid shape) but they can be pl
 - Some little ground noise due to the Switched-mode power supply (Filtering needed)
 
 ## How to customize the code
-- You need to set the number of LED on each LED strip.
+- You need to set the number of LED on each LED strip. (N_PIXELS / N_PIXELS_AUX1 / N_PIXELS_AUX2)
 - Depending your coding skills, you can change colors on some templates. (firsts VU for exemple)
-- You need to install FastLed library and use Arduino 1.65 software to prevent crashs.
-- to be continued...
+- You need to install somes libraries and use Arduino v1.65 in case of crashs. (to be confirmed)
+https://github.com/carlynorama/Arduino-Library-Button
+https://github.com/FastLED/FastLED
+
 
 ## How to use it
 By default, all lights are turned off.
@@ -44,18 +46,19 @@ A short press on button allows to:
 - Switch Pattern selection from Auto Change to Random Change and finally to Manual mode by selecting the next pattern.
 
 A long press on button allows to:
-- Turn on the lights in Always On Mode
+- Turn on the lights in "Always On" Mode
 - Turn off the lights
 
 ## What i need to make it ?
 - An Arduino UNO
-https://fr.aliexpress.com/item/UNO-R3-CH340G-ATmega328P-compatible-for-Arduino-UNO-R3/32523366108.html
+https://www.aliexpress.com/item/32523366108.html
 
 - I recommend to use WS2812 strip led with 100 Leds / Meter because of the black PCB/Led (check pics) (1M 100 IP30)
-https://fr.aliexpress.com/item/1m-4m-5m-WS2812B-Smart-led-pixel-strip-Black-White-PCB-30-60-144-leds-m/2036819167.html
+https://www.aliexpress.com/item/2036819167.html
 
-- Depending your setup, you may need a dedicated power supply (5V 6A)
-https://fr.aliexpress.com/item/LED-AC110V-220V-TO-DC-12V-24V-5V-1A-2A-5A-8A-10A-15A-20A-30A/32822508171.html
+- Depending your setup, you may need a dedicated power supply 
+Guide: https://github.com/thehookup/Holiday_LEDs_2.0/blob/master/Strip%20Wattage.pdf
+https://www.aliexpress.com/item/32822508171.html
 
 - Do your own Shield or use an Arduino prototyping board :
 https://www.ebay.com/itm/263092669047
@@ -63,7 +66,6 @@ https://www.ebay.com/itm/263092669047
 - Some components (see Schematics folder)
 
 ## Help needed !
-- Most templates have been created for a linear system. If some have a correct visual rendering, others would need to be adapted to the round shape. (-fire- for exemple)
 Anyone can propose modified or original templates.
 - Regarding electronics, I need tips on filtering to remove power supply and LED noise.
 - Looking for a way to turn off light when a silence is detected during a predefined time. (a kind of autostop)
